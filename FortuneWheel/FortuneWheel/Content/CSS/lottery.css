@@ -1,0 +1,28 @@
+﻿#image{
+    background-image:url("../../Content/Image/bg.png");
+    z-index:1;
+    position:absolute;
+}
+#point{
+    margin-left:179px;
+    padding-bottom:255px;
+    position:absolute;
+    z-index:2;
+}
+.content{
+    margin-left:100px;
+    margin-top:100px;
+}
+a.button{
+    background:url("../../Content/Image/btnStart.png")no-repeat;
+    display:block;
+    position:relative;
+    left: 196px;
+    top: 195px;
+    height:140px;
+    width:140px;
+    z-index:3;
+}
+a.button:hover{
+    background:url("../../Content/Image/btnOver.png")no-repeat;
+}
