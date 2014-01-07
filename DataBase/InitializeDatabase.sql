@@ -5,7 +5,7 @@ PRINT 'Start create table ''Players'''
 
 CREATE TABLE [dbo].[Players](
 	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[CellPhoneNo] [int] NOT NULL,
+	[CellPhoneNo] [nvarchar](50) NOT NULL,
 	[LotteryCount] [int] NOT NULL,
 	[LastLoginTime] [datetime] NOT NULL,
  CONSTRAINT [PK_Players] PRIMARY KEY CLUSTERED 
@@ -36,7 +36,7 @@ Print 'Start create table ''WinInfo'''
 SET QUOTED_IDENTIFIER ON
 CREATE TABLE [dbo].[LotteryHistory](
 	[ID] [int] IDENTITY(1,1) NOT NULL,
-	[CellPhoneNo] [int] NOT NULL,	
+	[CellPhoneNo] [nvarchar](50) NOT NULL,	
 	[LotteryTime] [datetime] NOT NULL,
 	[AwardID] [int] NOT NULL,
 	[CardCode] [nvarchar](255) NOT NULL,
