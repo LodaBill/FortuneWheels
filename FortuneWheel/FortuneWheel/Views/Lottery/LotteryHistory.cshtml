@@ -1,0 +1,26 @@
+﻿@{
+    Layout = null;
+}
+@model List<Entity.Model.LotteryHistory> 
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>LotteryHistory</title>
+</head>
+<body>
+    <div>
+        <table>
+            @foreach (var item in Model)
+            { 
+                <tr>
+                    <td>@item.CellPhoneNo</td>
+                    <td>@item.LotteryTime</td>
+                    <td>@item.AwardName</td>
+                </tr>
+            }
+        </table>
+    </div>
+</body>
+</html>

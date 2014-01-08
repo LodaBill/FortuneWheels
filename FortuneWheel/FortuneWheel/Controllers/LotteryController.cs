@@ -17,25 +17,39 @@ namespace FortuneWheel.Controllers
 
         public ActionResult Lottery()
         {
+            string sPhoneNumber = this.Request.QueryString["PhoneNumber"];
+            //TODO If is authentication
+            if (string.IsNullOrWhiteSpace(sPhoneNumber))
+            {
+                return RedirectToAction("Error");
+            }
+            LotteryLogic.StoreLotteryUser(sPhoneNumber);
             return View();
         }
 
         public ActionResult Begin(string sPhoneNumber)
         {
-            LotteryAwards result = new LotteryAwards();
+            int sAngle = 300;
             string sErrorMessage = string.Empty;
-            //check number of time
-            if (LotteryLogic.CheckLotteryTime(sPhoneNumber))
+            try
             {
-                result = LotteryLogic.StartLottery();
+                //check number of time
+                if (LotteryLogic.CheckLotteryTime(sPhoneNumber))
+                {
+                    sAngle = LotteryLogic.StartLottery(sPhoneNumber).Angle;
+                }
+                else
+                {
+                    sErrorMessage = "已经没有抽奖次数";
+                }
+                Thread.Sleep(5000);
             }
-            else
+            catch(Exception e)
             {
-                sErrorMessage = "已经没有抽奖次数";
+                sErrorMessage = " 发生错误请重试";                   
             }
-            Thread.Sleep(5000);
             return Json(new {
-                result = result.Angle,
+                result = sAngle,
                 error = sErrorMessage                
             },JsonRequestBehavior.AllowGet);
         }
@@ -43,9 +57,16 @@ namespace FortuneWheel.Controllers
         public ActionResult Refresh(string sPhoneNumber)
         {
             int num = LotteryLogic.GetLotteryTime(sPhoneNumber);
-            return Json(new { 
+            return Json(new
+            {
                 num = num
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult LotteryHistory()
+        {
+            List<LotteryHistory> historyList = LotteryLogic.GetLotteryHistory();
+            return View(historyList);
         }
 
     }

@@ -12,11 +12,36 @@ namespace BusinessLogic
     public class LotteryLogic
     {
         private static List<LotteryAwards> resultList;
-        public static LotteryAwards StartLottery()
+        public static List<LotteryAwards> ResultList
+        {
+            get
+            {
+                if (resultList == null)
+                {
+                    resultList = LotteryDataAccess.GetAllLotteryAwards().ConvertToModel<LotteryAwards>();
+
+                    int min = 0;
+                    foreach (LotteryAwards award in resultList)
+                    {
+                        min += 1;
+                        award.MinNumber = min;
+                        min += Convert.ToInt32(MAXNUMBER * award.Rate);
+                        award.MaxNumber = min;
+                        min -= 1;
+                    }
+                }
+                return resultList;
+            }
+        }
+
+        private static readonly int MAXNUMBER = 10000;
+
+        public static LotteryAwards StartLottery(string sPhoneNumber)
         {
             LotteryAwards result = Random();
-            //LotteryDataAccess.ExecuteSP();
-            return result;
+            DataTable dt = LotteryDataAccess.ReduceCountAndSaveHistory(sPhoneNumber, result.AwardId);
+            string AwardId = dt.Rows[0][0].ToString();
+            return ResultList.Where(x => x.AwardId == AwardId).FirstOrDefault();
         }
 
         public static bool CheckLotteryTime(string sPhoneNumber)
@@ -30,7 +55,7 @@ namespace BusinessLogic
             return user == null ? 0 : user.LotteryCount;
         }
 
-        public static List<LotteryHistory> GetLotteryHistory(string sPhoneNumber)
+        public static List<LotteryHistory> GetLotteryHistory(string sPhoneNumber = "")
         {
             return LotteryDataAccess.GetLotteryHistory(sPhoneNumber).ConvertToModel<LotteryHistory>();
         }
@@ -45,26 +70,18 @@ namespace BusinessLogic
             return LotteryDataAccess.GetLotteryUser(sPhoneNumber).ConvertToModel<LotteryUser>().FirstOrDefault();
         }
 
-        public static List<LotteryAwards> GetLotteryAwards()
-        {
-            return LotteryDataAccess.GetAllLotteryAwards().ConvertToModel<LotteryAwards>();
-        }
 
         private static LotteryAwards Random()
         {
             Random random = new Random();
-            int i = random.Next(1, 10000);
-            if (resultList == null)
-            {
-                resultList = GetLotteryAwards();
-            }
+            int i = random.Next(1, MAXNUMBER);
 
-            foreach (LotteryAwards result in resultList)
+            foreach (LotteryAwards result in ResultList)
             {
-                //if (result.MinNumber <= i && i < result.MaxNumber)
-                //{
-                //    return result;
-                //}
+                if (result.MinNumber <= i && i < result.MaxNumber)
+                {
+                    return result;
+                }
             }
             return null;
         }

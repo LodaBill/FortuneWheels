@@ -11,7 +11,6 @@
         });
     }
     var setPosition = function (angle) {
-        $("#point").stopRotate();
         $("#point").rotate({
             animateTo: angle,
             callback: function () { },
@@ -26,15 +25,23 @@
             startRotate();
             $.ajax({
                 url: "/Lottery/Begin",
+                data: { sPhoneNumber: "123456" },
                 dataType: "json",
                 success: function (data) {
-                    setPosition(data.result);
+                    $("#point").stopRotate();
+                    if (data.error == "") {
+                        setPosition(data.result);
+                    }
+                    else {
+                        alert(data.error);
+                    }
                 }
             });
         });
         $("#refresh").on("click", function () {
             $.ajax({
                 url: "/Lottery/Refresh",
+                data: { sPhoneNumber: "123456" },
                 dataType: "json",
                 success: function (data) {
                     $("#num").empty().html(data.num);

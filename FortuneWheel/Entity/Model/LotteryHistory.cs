@@ -8,8 +8,8 @@ namespace Entity.Model
     public class LotteryHistory
     {
         public string CellPhoneNo { get; set; }
-        public string Date { get; set; }
-        public string sAward { get; set; }
+        public string LotteryTime { get; set; }
+        public string AwardName { get; set; }
         public string CardCode { get; set; }
     }
 }
