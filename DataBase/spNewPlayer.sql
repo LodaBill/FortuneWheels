@@ -18,7 +18,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE NewPlayer
+CREATE PROCEDURE spNewPlayer
 	-- Add the parameters for the stored procedure here
 	@CellPhoneNo	nvarchar(50)='' 
 AS
@@ -36,7 +36,7 @@ BEGIN
 		VALUES
            (@CellPhoneNo
            ,3
-           ,CONVERT( VARCHAR(8), GETDATE(), 112 ))
+           ,GETDATE())
 	END 
 	
 END
