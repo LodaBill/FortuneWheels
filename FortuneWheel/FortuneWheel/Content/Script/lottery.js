@@ -23,7 +23,7 @@
     var sleep = function (millseconds) {
         var currentDate = new Date();
         while (new Date() - currentDate < millseconds) {
-            
+
         }
     }
     var buttonStart = function () {
@@ -34,13 +34,14 @@
             data: { sPhoneNumber: location.search.split('=')[1] },
             dataType: "json",
             success: function (data) {
-                $("#start").on("click", buttonStart);                
+                $("#start").on("click", buttonStart);
                 //sleep(3000);
                 $("#zp").stopRotate();
                 if (data.error == "") {
                     setPosition(data.result);
                 }
                 else {
+                    setPosition(180);
                     alert(data.error);
                 }
             }
@@ -54,7 +55,12 @@
                 data: { sPhoneNumber: location.search.split('=')[1] },
                 dataType: "json",
                 success: function (data) {
-                    $("#num").empty().html(data.num);
+                    if (data.error == "") {
+                        $("#num").empty().html(data.num);
+                    }
+                    else {
+                        alert(data.error);
+                    }
                 }
             });
         });

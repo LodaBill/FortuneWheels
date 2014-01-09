@@ -18,8 +18,7 @@ namespace FortuneWheel.Controllers
         public ActionResult Lottery()
         {
             string sPhoneNumber = this.Request.QueryString["PhoneNumber"];
-            //TODO If is authentication
-            if (string.IsNullOrWhiteSpace(sPhoneNumber))
+            if (!LotteryLogic.QueryIsDownLoad(sPhoneNumber))
             {
                 ViewBag.IsAuthenticate = false;
             }
@@ -37,7 +36,7 @@ namespace FortuneWheel.Controllers
             string sErrorMessage = string.Empty;
             try
             {
-                if (string.IsNullOrWhiteSpace(sPhoneNumber))
+                if (!LotteryLogic.QueryIsDownLoad(sPhoneNumber))
                 {
                     throw new FormatException();
                 }
@@ -57,22 +56,37 @@ namespace FortuneWheel.Controllers
             {
                 sErrorMessage = " 该手机号无法参加活动";
             }
+            catch (HttpException e)
+            {
+                sErrorMessage = "发送短信失败";
+            }
             catch (Exception e)
             {
                 sErrorMessage = " 发生错误请重试";
             }
-            return Json(new {
+            return Json(new
+            {
                 result = sAngle,
-                error = sErrorMessage                
-            },JsonRequestBehavior.AllowGet);
+                error = sErrorMessage
+            }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Refresh(string sPhoneNumber)
         {
-            int num = LotteryLogic.GetLotteryTime(sPhoneNumber);
+            string sErrorMessage = string.Empty;
+            int num = 0;
+            try
+            {
+                num = LotteryLogic.GetLotteryTime(sPhoneNumber);
+            }
+            catch (Exception e)
+            {
+                sErrorMessage = " 发生错误请重试";
+            }
             return Json(new
             {
-                num = num
+                num = num,
+                error = sErrorMessage
             }, JsonRequestBehavior.AllowGet);
         }
 

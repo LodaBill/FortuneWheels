@@ -16,6 +16,7 @@ namespace DataAccess
         {
             return WebConfigurationManager.ConnectionStrings["DBConnectionString"].ConnectionString;
         }
+
         public  DataTable ExcuteSqlReturnDataTable(string sql, SqlParameter[] sqlParameters)
         {
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
@@ -50,6 +51,49 @@ namespace DataAccess
             }
         }
 
+        public DataTable ExcuteSqlReturnDataTableTransaction(string sql, SqlParameter[] sqlParameters)
+        {
+            using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+            {
+                connection.Open();
+                SqlTransaction transaction = connection.BeginTransaction();
+                try
+                {
+                    using (SqlCommand command = new SqlCommand(sql, connection, transaction))
+                    {
+                        foreach (SqlParameter sqlParameter in sqlParameters)
+                        {
+                            if (sqlParameter.Value != null)
+                            {
+                                if (sqlParameter.Value is string)
+                                {
+                                    if (string.IsNullOrEmpty((string)sqlParameter.Value))
+                                    {
+                                        sqlParameter.Value = null;
+                                    }
+                                }
+                            }
+                            if (sqlParameter.Value == null)
+                            {
+                                sqlParameter.Value = (object)DBNull.Value;
+                            }
+                            command.Parameters.Add(sqlParameter);
+                        }
+                        SqlDataAdapter sa = new SqlDataAdapter();
+                        sa.SelectCommand = command;
+                        DataSet ds = new DataSet();
+                        sa.Fill(ds);
+                        transaction.Commit();
+                        return ds.Tables[0];
+                    }
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    return new DataTable();
+                }
+            }
+        }
 
         public  DataTable ExcuteSqlReturnDataTable(string sql)
         {

@@ -31,27 +31,46 @@ namespace DataAccess
         public static DataTable GetLotteryUser(string sPhoneNumber)
         {
             DataBase dataBase = new DataBase();
-            string sql = "select * from Players where CellPhoneNo = " + sPhoneNumber;
-            return dataBase.ExcuteSqlReturnDataTable(sql);
+            string sql = "select * from Players where CellPhoneNo = @CellPhoneNo";
+            SqlParameter[] sqlparameter = new SqlParameter[1];
+            sqlparameter[0] = new SqlParameter("@CellPhoneNo", sPhoneNumber);
+            return dataBase.ExcuteSqlReturnDataTable(sql, sqlparameter);
         }
 
         public static void StoreLotteryUser(string sPhoneNumber)
         {
             DataBase dataBase = new DataBase();
-            string sql = "exec spNewPlayer @CellPhoneNo = @CellPhoneNo";
+            string sql = "exec spNewPlayer @CellPhoneNo = @CellPhone";
             SqlParameter[] sqlparameter = new SqlParameter[1];
-            sqlparameter[0] = new SqlParameter("@CellPhoneNo", sPhoneNumber);
+            sqlparameter[0] = new SqlParameter("@CellPhone", sPhoneNumber);
             dataBase.ExcuteSqlReturnInt(sql, sqlparameter);
         }
 
-        public static DataTable ReduceCountAndSaveHistory(string sPhoneNumber,string sAwardId)
+        public static DataTable ReduceCountAndSaveHistory(string sPhoneNumber, string sAwardId)
         {
             DataBase dataBase = new DataBase();
-            string sql = "exec spLotteryProcess @CellPhoneNo = @CellPhoneNo , @AwardID = @AwardID ";
+            string sql = "exec spLotteryProcess @CellPhoneNo = @CellPhone , @AwardID = @Award ";
             SqlParameter[] sqlparameter = new SqlParameter[2];
-            sqlparameter[0] = new SqlParameter("@CellPhoneNo",sPhoneNumber);
-            sqlparameter[1] = new SqlParameter("@AwardID", sAwardId);
-            return dataBase.ExcuteSqlReturnDataTable(sql, sqlparameter);
+            sqlparameter[0] = new SqlParameter("@CellPhone", sPhoneNumber);
+            sqlparameter[1] = new SqlParameter("@Award", sAwardId);
+            return dataBase.ExcuteSqlReturnDataTableTransaction(sql, sqlparameter);
+        }
+
+
+        public static void test()
+        {
+            DataBase dataBase = new DataBase();
+            List<int> list = new List<int>() { 1, 2, 5, 10 };
+            int temp = 0;
+            for (int i = 0; i < 10000; i++)
+            {
+                Guid guid = Guid.NewGuid();
+                Random random = new Random();
+                temp = random.Next(0, 4);
+                string sRandomString = Convert.ToBase64String(guid.ToByteArray());
+                string sql = "INSERT INTO [dbo].[CardCodes] ([AwardID],[CardCode],[Used])VALUES(" + list[temp] + ",'" + sRandomString + "',0)";
+                dataBase.ExcuteSqlReturnInt(sql);
+            }
         }
     }
 }
