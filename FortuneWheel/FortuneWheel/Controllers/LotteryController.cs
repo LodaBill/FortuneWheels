@@ -90,11 +90,57 @@ namespace FortuneWheel.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult LotteryHistory()
+        [HttpGet]
+        public ActionResult Login()
         {
-            List<LotteryHistory> historyList = LotteryLogic.GetLotteryHistory();
-            return View(historyList);
+            return View();
         }
 
+        [HttpPost]
+        public ActionResult Login(string sUserName, string sPassword)
+        {
+            if (sUserName == "administrator" && sPassword == "Dkdk75490")
+            {
+                Session["user"] = "Authorized";
+                return RedirectToAction("Detail");
+            }
+            return View();
+        }
+
+        public ActionResult Detail()
+        {
+            if (Session["user"] == null || Session["user"].ToString() != "Authorized")
+            {
+                return RedirectToAction("Login");
+            }
+            List<LotteryAwards> userList = LotteryLogic.ResultList;
+            return View(userList);
+        }
+
+        [HttpGet]
+        public ActionResult Edit(string id)
+        {
+            if (Session["user"] == null || Session["user"].ToString() != "Authorized")
+            {
+                return RedirectToAction("Login");
+            }
+            LotteryAwards model = LotteryLogic.ResultList.Where(t => t.AwardId == id).FirstOrDefault();
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(LotteryAwards model)
+        {
+            if (Session["user"] == null || Session["user"].ToString() != "Authorized")
+            {
+                return RedirectToAction("Login");
+            }
+            if (LotteryLogic.UpdateAward(model))
+            {
+                LotteryLogic.ResultList = null;
+                return RedirectToAction("Detail");
+            }
+            return View();
+        }
     }
 }

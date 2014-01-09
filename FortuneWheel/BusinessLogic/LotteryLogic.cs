@@ -41,6 +41,10 @@ namespace BusinessLogic
                 }
                 return resultList;
             }
+            set 
+            {
+                resultList = value;
+            }
         }
 
 
@@ -83,6 +87,16 @@ namespace BusinessLogic
             return LotteryDataAccess.GetLotteryUser(sPhoneNumber).ConvertToModel<LotteryUser>().FirstOrDefault();
         }
 
+        public static List<LotteryUser> GetLotteryAllUser()
+        {
+            return LotteryDataAccess.GetLotteryAllUser().ConvertToModel<LotteryUser>();
+        }
+
+
+        public static bool UpdateAward(LotteryAwards awards)
+        {
+            return LotteryDataAccess.UpdateAward(awards.AwardId, awards.AwardName, awards.Rate.ToString(), awards.TotalCount, awards.SurplusCount);
+        }
 
         public static void SendSMS(string sPhoneNumber, string sCardCode)
         {
