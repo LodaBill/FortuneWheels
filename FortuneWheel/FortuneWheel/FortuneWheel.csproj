@@ -108,15 +108,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Image\bg.png" />
-    <Content Include="Content\Image\btnOver.gif" />
-    <Content Include="Content\Image\btnStart.gif" />
-    <Content Include="Content\Image\btnWait.gif" />
-    <Content Include="Content\Image\pointer.png" />
-    <Content Include="Content\Image\prize.png" />
+    <Content Include="Content\Images\arrow.png" />
+    <Content Include="Content\Images\awardbg.jpg" />
+    <Content Include="Content\Images\btnOver.png" />
+    <Content Include="Content\Images\btnStart.png" />
+    <Content Include="Content\Images\cjstart.png" />
+    <Content Include="Content\Images\icon.png" />
+    <Content Include="Content\Images\mainbg.jpg" />
+    <Content Include="Content\Images\topbn.jpg" />
+    <Content Include="Content\Images\ypan.png" />
     <Content Include="Content\Script\jquery-1.9.1.js" />
     <Content Include="Content\Script\lottery.js" />
     <Content Include="Content\CSS\lottery.css" />
+    <Content Include="Content\Script\unAuthorize.js" />
     <Compile Include="Controllers\LotteryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

@@ -1,6 +1,6 @@
 ﻿(function () {
     var startRotate = function () {
-        $("#point").rotate({
+        $("#zp").rotate({
             angle: 0,
             animateTo: 360,
             callback: startRotate,
@@ -11,8 +11,8 @@
         });
     }
     var setPosition = function (angle) {
-        $("#point").rotate({
-            animateTo: angle,
+        $("#zp").rotate({
+            animateTo: 360 - angle,
             callback: function () { },
             easing: function (x, t, b, c, d) {
                 // t: current time, b: begInnIng value, c: change In value, d: duration
@@ -20,28 +20,38 @@
             }
         });
     }
-    $(function () {
-        $("#start").on("click", function () {
-            startRotate();
-            $.ajax({
-                url: "/Lottery/Begin",
-                data: { sPhoneNumber: "123456" },
-                dataType: "json",
-                success: function (data) {
-                    $("#point").stopRotate();
-                    if (data.error == "") {
-                        setPosition(data.result);
-                    }
-                    else {
-                        alert(data.error);
-                    }
+    var sleep = function (millseconds) {
+        var currentDate = new Date();
+        while (new Date() - currentDate < millseconds) {
+            
+        }
+    }
+    var buttonStart = function () {
+        startRotate();
+        $("#start").off("click", buttonStart);
+        $.ajax({
+            url: "/Lottery/Begin",
+            data: { sPhoneNumber: location.search.split('=')[1] },
+            dataType: "json",
+            success: function (data) {
+                $("#start").on("click", buttonStart);                
+                //sleep(3000);
+                $("#zp").stopRotate();
+                if (data.error == "") {
+                    setPosition(data.result);
                 }
-            });
+                else {
+                    alert(data.error);
+                }
+            }
         });
+    }
+    $(function () {
+        $("#start").on("click", buttonStart);
         $("#refresh").on("click", function () {
             $.ajax({
                 url: "/Lottery/Refresh",
-                data: { sPhoneNumber: "123456" },
+                data: { sPhoneNumber: location.search.split('=')[1] },
                 dataType: "json",
                 success: function (data) {
                     $("#num").empty().html(data.num);

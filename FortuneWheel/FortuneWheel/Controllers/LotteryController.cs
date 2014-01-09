@@ -21,9 +21,13 @@ namespace FortuneWheel.Controllers
             //TODO If is authentication
             if (string.IsNullOrWhiteSpace(sPhoneNumber))
             {
-                return RedirectToAction("Error");
+                ViewBag.IsAuthenticate = false;
             }
-            LotteryLogic.StoreLotteryUser(sPhoneNumber);
+            else
+            {
+                ViewBag.IsAuthenticate = true;
+                LotteryLogic.StoreLotteryUser(sPhoneNumber);
+            }
             return View();
         }
 
@@ -33,20 +37,29 @@ namespace FortuneWheel.Controllers
             string sErrorMessage = string.Empty;
             try
             {
+                if (string.IsNullOrWhiteSpace(sPhoneNumber))
+                {
+                    throw new FormatException();
+                }
                 //check number of time
                 if (LotteryLogic.CheckLotteryTime(sPhoneNumber))
                 {
                     sAngle = LotteryLogic.StartLottery(sPhoneNumber).Angle;
+                    Thread.Sleep(3000);
                 }
                 else
                 {
                     sErrorMessage = "已经没有抽奖次数";
                 }
-                Thread.Sleep(5000);
+
             }
-            catch(Exception e)
+            catch (FormatException e)
             {
-                sErrorMessage = " 发生错误请重试";                   
+                sErrorMessage = " 该手机号无法参加活动";
+            }
+            catch (Exception e)
+            {
+                sErrorMessage = " 发生错误请重试";
             }
             return Json(new {
                 result = sAngle,
