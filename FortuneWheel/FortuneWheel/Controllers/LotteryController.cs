@@ -48,13 +48,13 @@ namespace FortuneWheel.Controllers
                 }
                 else
                 {
-                    sErrorMessage = "已经没有抽奖次数";
+                    sErrorMessage = "您已参与过此次活动，谢谢关注！";
                 }
 
             }
             catch (FormatException e)
             {
-                sErrorMessage = " 该手机号无法参加活动";
+                sErrorMessage = "请点击“火速前往”按钮下载安装游戏参与抽奖";
             }
             catch (HttpException e)
             {

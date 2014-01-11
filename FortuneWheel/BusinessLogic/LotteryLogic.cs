@@ -18,6 +18,7 @@ namespace BusinessLogic
         private static List<LotteryAwards> resultList;
         private static readonly string sSendSMSUrl = @"http://122.224.203.33/lenjoy/index.php/Outface/sendSMS?userphone={0}&sms={1}&chanid=yycj";
         private static readonly string sQueryDownLoadUrl = "http://122.224.203.33/lenjoy/index.php/Outface/queryAppDown?userphone={0}&appname={1}";
+        private static readonly string sSMSText = "恭喜您在玩游戏、抽大奖活动中抽中{0}元话费！充值卡密码为 {1}，您可以复制该号码直接在玩库内充值";
         private static readonly string sAppName = "微信";
         private static readonly int MAXNUMBER = 10000;
 
@@ -41,7 +42,7 @@ namespace BusinessLogic
                 }
                 return resultList;
             }
-            set 
+            set
             {
                 resultList = value;
             }
@@ -56,7 +57,7 @@ namespace BusinessLogic
             string sCardCode = dt.Rows[0][1].ToString();
             if (!string.IsNullOrWhiteSpace(sCardCode))
             {
-                SendSMS(sPhoneNumber, sCardCode);
+                SendSMS(sPhoneNumber, AwardId, sCardCode);
             }
             return ResultList.Where(x => x.AwardId == AwardId).FirstOrDefault();
         }
@@ -98,12 +99,12 @@ namespace BusinessLogic
             return LotteryDataAccess.UpdateAward(awards.AwardId, awards.AwardName, awards.Rate.ToString(), awards.TotalCount, awards.SurplusCount);
         }
 
-        public static void SendSMS(string sPhoneNumber, string sCardCode)
+        public static void SendSMS(string sPhoneNumber, string sCardId, string sCardCode)
         {
             using (WebClient webClient = new WebClient())
             {
                 webClient.Encoding = Encoding.UTF8;
-                string response = webClient.UploadString(string.Format(sSendSMSUrl, sPhoneNumber, sCardCode), "GET");
+                string response = webClient.UploadString(string.Format(sSendSMSUrl, sPhoneNumber,  HttpUtility.UrlEncode(string.Format(sSMSText, sCardId, sCardCode))), "GET");
                 string retCode = response.IndexOf("Retcode") != -1 && response.IndexOf("Retcode") + 12 <= response.Length
                     ? response.Substring(response.IndexOf("Retcode") + 9, 3) : string.Empty;
                 if (retCode != "100")

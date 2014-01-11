@@ -2,10 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta content="yes" name="apple-mobile-web-app-capable" />
-    <meta content="yes" name="apple-touch-fullscreen" />
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
-    <meta name="format-detection" content="telephone=no" />
+    <meta content="target-densitydpi=device-dpi,width=480" name="viewport">
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <title>玩游戏抽大奖</title>
@@ -15,7 +12,7 @@
     <div id="wrap">
         <div class="topbn">
             <p>
-                活动期间，在玩库内下载XX游戏即可获得3次抽奖机会。<a class="btn" title="火速前往"></a></p>
+                活动期间，在玩库内下载XX游戏即可获得3次抽奖机会。<a class="btn" title="火速前往" href="wanku://playFlow/1"></a></p>
         </div>
         <p class="awardbg">
             你现有<span id="num">xx</span>次抽奖机会。<a href="javascript:void(0)" id="refresh">刷新次数</a></p>
@@ -38,6 +35,7 @@
     <script src="~/Content/Script/jquery-1.9.1.js"></script>
     <script src="~/Content/Script/jquery.rotate.1-1.js"></script>
     <script src="~/Content/Script/lottery.js"></script>
+    <script src="~/Content/Script/responsive.js"></script>
     @if (!ViewBag.IsAuthenticate)
     { 
         <script src="~/Content/Script/unAuthorize.js"></script>

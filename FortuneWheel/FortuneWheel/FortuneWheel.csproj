@@ -121,6 +121,7 @@
     <Content Include="Content\Script\lottery.js" />
     <Content Include="Content\CSS\lottery.css" />
     <Content Include="Content\Script\unAuthorize.js" />
+    <Content Include="Content\Script\responsive.js" />
     <Compile Include="Controllers\LotteryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

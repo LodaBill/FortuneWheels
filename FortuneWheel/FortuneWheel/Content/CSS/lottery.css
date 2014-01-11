@@ -1,6 +1,4 @@
-﻿
-
-html,body,menu,ul,ol,li,p,div,form,dl,dt,dd,h1,h2,h3,h4,h5,h6,img,a img,input,button,textarea,fieldset{padding:0;margin:0;border:0}
+﻿html,body,menu,ul,ol,li,p,div,form,dl,dt,dd,h1,h2,h3,h4,h5,h6,img,a img,input,button,textarea,fieldset{padding:0;margin:0;border:0}
 ul,ol,li{list-style:none}
 h1,h2,h3,h4,h5,h6,b,i,em{font-size:1em;font-weight:normal;font-style:normal}
 body,input,button,textarea,select{-webkit-text-size-adjust:none;font:normal 14px/1.5 "Microsoft YaHei",Helvetica;outline:0;color:#691c07}
@@ -9,8 +7,8 @@ img{vertical-align:middle}
 
 .btn,dl dt,dl dd{background:url(../images/icon.png) no-repeat;}
 
-body{min-width:480px;margin:0 auto; background-color:#fff;}
-#wrap{width:480px; margin:0 auto; background:#eedfc8;}
+body{width:480px; height:100%; background-color:#fff;}
+#wrap{max-width:480px; margin:0 auto; background:#eedfc8;}
 .topbn{height:217px; background:url(../images/topbn.jpg) no-repeat center top;}
 .topbn p{padding-top:188px; height:28px; color:#f1d691; font-weight:bold; font-size:14px; text-align:center;}
 .btn{width:73px; height:28px; display:inline-block; background-position:0 0; vertical-align:middle; cursor:pointer;}
