@@ -18,15 +18,20 @@ namespace FortuneWheel.Controllers
         public ActionResult Lottery()
         {
             string sPhoneNumber = this.Request.QueryString["PhoneNumber"];
-            if (!LotteryLogic.QueryIsDownLoad(sPhoneNumber))
+            string sErrorMessage = string.Empty;
+            if (LotteryLogic.QueryIsDownLoad(sPhoneNumber))
             {
-                ViewBag.IsAuthenticate = false;
+                LotteryLogic.StoreLotteryUser(sPhoneNumber);
+                if (LotteryLogic.CheckLotteryTime(sPhoneNumber))
+                {
+                    sErrorMessage = "您已使用完抽奖次数，谢谢参与";
+                }
             }
             else
             {
-                ViewBag.IsAuthenticate = true;
-                LotteryLogic.StoreLotteryUser(sPhoneNumber);
+                sErrorMessage = "请点击“火速前往”，下载XX游戏参与活动!";
             }
+            ViewBag.ErrorMessage = sErrorMessage;
             return View();
         }
 
@@ -36,25 +41,21 @@ namespace FortuneWheel.Controllers
             string sErrorMessage = string.Empty;
             try
             {
-                if (!LotteryLogic.QueryIsDownLoad(sPhoneNumber))
+                if (LotteryLogic.QueryIsDownLoad(sPhoneNumber))
                 {
-                    throw new FormatException();
-                }
-                //check number of time
-                if (LotteryLogic.CheckLotteryTime(sPhoneNumber))
-                {
-                    sAngle = LotteryLogic.StartLottery(sPhoneNumber).Angle;
-                    Thread.Sleep(3000);
+                    if (LotteryLogic.CheckLotteryTime(sPhoneNumber))
+                    {
+                        sAngle = LotteryLogic.StartLottery(sPhoneNumber).Angle;
+                    }
+                    else
+                    {
+                        sErrorMessage = "您已使用完抽奖次数，谢谢参与";
+                    }
                 }
                 else
                 {
-                    sErrorMessage = "您已参与过此次活动，谢谢关注！";
+                    sErrorMessage = "快去下载XX游戏参与抽奖吧~";
                 }
-
-            }
-            catch (FormatException e)
-            {
-                sErrorMessage = "请点击“火速前往”按钮下载安装游戏参与抽奖";
             }
             catch (HttpException e)
             {
@@ -88,6 +89,12 @@ namespace FortuneWheel.Controllers
                 num = num,
                 error = sErrorMessage
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Sleep()
+        {
+            Thread.Sleep(3000);
+            return View();
         }
 
         [HttpGet]

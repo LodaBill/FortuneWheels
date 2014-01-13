@@ -41,14 +41,13 @@
             }
         });
     }
-    var sleep = function (millseconds) {
+    var sleeps= function (millseconds) {
         var currentDate = new Date();
         while (new Date() - currentDate < millseconds) {
 
         }
     }
     var buttonStart = function () {
-        startRotate();
         $("#start").off("click", buttonStart);
         $.ajax({
             url: "/Lottery/Begin",
@@ -56,34 +55,44 @@
             dataType: "json",
             success: function (data) {
                 $("#start").on("click", buttonStart);
-                //sleep(3000);
                 $("#zp").stopRotate();
+                refresh();
                 if (data.error == "") {
+                    startRotate();
                     setPosition(data.result);
                 }
                 else {
-                    setPosition(180);
                     alert(data.error);
                 }
             }
         });
     }
+    var refresh = function () {
+        $.ajax({
+            url: "/Lottery/Refresh",
+            data: { sPhoneNumber: location.search.split('=')[1] },
+            dataType: "json",
+            success: function (data) {
+                if (data.error == "") {
+                    $("#num").empty().html(data.num);
+                }
+                else {
+                    alert(data.error);
+                }
+            }
+        });
+    };
+    var sleep = function () {
+        $.ajax({
+            url: "/Lottery/Sleep",
+            dataType: "json",
+            success: function (data) {
+            }
+        });
+    };
     $(function () {
         $("#start").on("click", buttonStart);
-        $("#refresh").on("click", function () {
-            $.ajax({
-                url: "/Lottery/Refresh",
-                data: { sPhoneNumber: location.search.split('=')[1] },
-                dataType: "json",
-                success: function (data) {
-                    if (data.error == "") {
-                        $("#num").empty().html(data.num);
-                    }
-                    else {
-                        alert(data.error);
-                    }
-                }
-            });
-        });
+        $("#refresh").on("click", refresh);
+        refresh();
     });
 })();

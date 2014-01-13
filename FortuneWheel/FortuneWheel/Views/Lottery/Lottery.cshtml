@@ -15,7 +15,7 @@
                 活动期间，在玩库内下载XX游戏即可获得3次抽奖机会。<a class="btn" title="火速前往" href="wanku://playFlow/1"></a></p>
         </div>
         <p class="awardbg">
-            你现有<span id="num">xx</span>次抽奖机会。<a href="javascript:void(0)" id="refresh">刷新次数</a></p>
+            你现有<span id="num"></span>次抽奖机会。<a href="javascript:void(0)" id="refresh">刷新次数</a></p>
         <div class="main">
             <div id="mainzp">
                 <img src="~/Content/Images/ypan.png" id="zp" />
@@ -36,9 +36,11 @@
     <script src="~/Content/Script/jquery.rotate.1-1.js"></script>
     <script src="~/Content/Script/lottery.js"></script>
     <script src="~/Content/Script/responsive.js"></script>
-    @if (!ViewBag.IsAuthenticate)
+    @if (@ViewBag.ErrorMessage != "")
     { 
-        <script src="~/Content/Script/unAuthorize.js"></script>
+        <script type="text/javascript">
+            alert('@ViewBag.ErrorMessage');
+        </script>
     }
 </body>
 </html>
