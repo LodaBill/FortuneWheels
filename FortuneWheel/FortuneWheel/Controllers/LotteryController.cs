@@ -17,12 +17,12 @@ namespace FortuneWheel.Controllers
 
         public ActionResult Lottery()
         {
-            string sPhoneNumber = this.Request.QueryString["PhoneNumber"];
+            string sPhoneNumber = this.Request.QueryString["Phone"];
             string sErrorMessage = string.Empty;
             if (LotteryLogic.QueryIsDownLoad(sPhoneNumber))
             {
                 LotteryLogic.StoreLotteryUser(sPhoneNumber);
-                if (LotteryLogic.CheckLotteryTime(sPhoneNumber))
+                if (!LotteryLogic.CheckLotteryTime(sPhoneNumber))
                 {
                     sErrorMessage = "您已使用完抽奖次数，谢谢参与";
                 }
@@ -106,7 +106,7 @@ namespace FortuneWheel.Controllers
         [HttpPost]
         public ActionResult Login(string sUserName, string sPassword)
         {
-            if (sUserName == "administrator" && sPassword == "Dkdk75490")
+            if (sUserName == "admin" && sPassword == "gamecj@654321")
             {
                 Session["user"] = "Authorized";
                 return RedirectToAction("Detail");

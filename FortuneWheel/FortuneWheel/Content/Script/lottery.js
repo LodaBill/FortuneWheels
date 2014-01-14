@@ -41,7 +41,7 @@
             }
         });
     }
-    var sleeps= function (millseconds) {
+    var sleeps = function (millseconds) {
         var currentDate = new Date();
         while (new Date() - currentDate < millseconds) {
 
@@ -51,7 +51,7 @@
         $("#start").off("click", buttonStart);
         $.ajax({
             url: "/Lottery/Begin",
-            data: { sPhoneNumber: location.search.split('=')[1] },
+            data: { sPhoneNumber: getPhoneNumber() },
             dataType: "json",
             success: function (data) {
                 $("#start").on("click", buttonStart);
@@ -59,7 +59,7 @@
                 refresh();
                 if (data.error == "") {
                     startRotate();
-                    setPosition(data.result);
+                    sleep(data.result);
                 }
                 else {
                     alert(data.error);
@@ -70,7 +70,7 @@
     var refresh = function () {
         $.ajax({
             url: "/Lottery/Refresh",
-            data: { sPhoneNumber: location.search.split('=')[1] },
+            data: { sPhoneNumber: getPhoneNumber() },
             dataType: "json",
             success: function (data) {
                 if (data.error == "") {
@@ -82,13 +82,24 @@
             }
         });
     };
-    var sleep = function () {
+    var sleep = function (result) {
         $.ajax({
             url: "/Lottery/Sleep",
-            dataType: "json",
+            dataType: "xml",
             success: function (data) {
+                setPosition(result);
             }
         });
+    };
+    var getPhoneNumber = function () {
+        var query = location.search.toLowerCase();
+        var index = query.indexOf("phone");
+        if (index == 1) {
+            return query.substring(index + 6, index + 17);
+        }
+        else {
+            return "";
+        }
     };
     $(function () {
         $("#start").on("click", buttonStart);

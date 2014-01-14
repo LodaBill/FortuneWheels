@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta content="target-densitydpi=device-dpi,width=480" name="viewport">
+    <meta content="target-densitydpi=device-dpi,width=480" name="viewport"/>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <title>玩游戏抽大奖</title>
@@ -18,18 +18,17 @@
             你现有<span id="num"></span>次抽奖机会。<a href="javascript:void(0)" id="refresh">刷新次数</a></p>
         <div class="main">
             <div id="mainzp">
-                <img src="~/Content/Images/ypan.png" id="zp" />
+                <img src="~/Content/Images/ypan.png" alt="zp" id="zp" />
                 <em id="arrow"></em><span id="start"></span>
             </div>
         </div>
-        <dl>
+                <dl>
             <dt>温馨提示</dt>
-            <dd>
-                实物奖将在活动结束后7个工作日内发放。
-            </dd>
-            <dd class="ddt">
-                话费奖将在中奖之后24小时内以短信方式发。
-            </dd>
+            1、在玩库玩转流量-热门游戏中下载XXX游戏即可获得3次抽奖机会。 
+            <br>2、完成下载安装任务后，奖次数在24小时内更新
+            <br>3、重复下载安装XXX游戏不会带来抽奖次数的增加
+            <br>4、实物奖励将在中奖后7天内发放
+            <br>5、话费奖励将在中奖后48小时内以短信方式下发
         </dl>
     </div>
     <script src="~/Content/Script/jquery-1.9.1.js"></script>
@@ -39,7 +38,7 @@
     @if (@ViewBag.ErrorMessage != "")
     { 
         <script type="text/javascript">
-            alert('@ViewBag.ErrorMessage');
+            $(function () { alert('@ViewBag.ErrorMessage') });
         </script>
     }
 </body>

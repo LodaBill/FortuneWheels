@@ -147,7 +147,7 @@ namespace BusinessLogic
                     return result;
                 }
             }
-            return null;
+            return ResultList.Where(x => x.Angle == 180).FirstOrDefault();
         }
 
     }
